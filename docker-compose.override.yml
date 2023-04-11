@@ -1,0 +1,8 @@
+services:
+  mongodb:
+    ports:
+      - "${MONGO_PORT}:27017"
+
+  testwork_bot:
+    build:
+      target: development

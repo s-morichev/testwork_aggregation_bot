@@ -1,0 +1,23 @@
+services:
+  mongodb:
+    image: mongo:6.0.5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - mongodb_data:/data/db
+
+  testwork_bot:
+    image: testwork_bot
+    env_file:
+      - .env
+    volumes:
+      - testwork_bot_data:/opt/app/app
+      - ./sampleDB:/sampleDB
+
+
+volumes:
+  mongodb_data:
+  testwork_bot_data:
