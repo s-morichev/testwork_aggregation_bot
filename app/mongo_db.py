@@ -2,13 +2,18 @@ from datetime import datetime, timedelta
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-
 from app.config import settings
 from app.constants import TimePeriod
 
-
+# словарь кортежей из двух элемнтов
+# 1 элемент - dateParts для получения даты начала периода времени
+# 2 элемент - название time unit для $densify range unit
 _aggregate_salary_parameters = {
     TimePeriod.MONTH: ({"year": {"$year": "$dt"}, "month": {"$month": "$dt"}}, "month"),
+    TimePeriod.WEEK: (
+        {"isoWeekYear": {"$year": "$dt"}, "isoWeek": {"$week": "$dt"}},
+        "week",
+    ),
     TimePeriod.DAY: (
         {
             "year": {"$year": "$dt"},
@@ -31,9 +36,7 @@ _aggregate_salary_parameters = {
 
 class MongoDatabase:
     def __init__(self, mongo_uri):
-        self._client = AsyncIOMotorClient(
-            mongo_uri, serverSelectionTimeoutMS=5000
-        )
+        self._client = AsyncIOMotorClient(mongo_uri, serverSelectionTimeoutMS=5000)
         self._db = self._client[settings.mongo_db_name]
 
     def __enter__(self):

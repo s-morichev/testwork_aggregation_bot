@@ -5,6 +5,7 @@ class TimePeriod(enum.Enum):
     HOUR = "hour"
     DAY = "day"
     MONTH = "month"
+    WEEK = "week"
 
     @classmethod
     def values_list(cls):
@@ -16,7 +17,7 @@ START_MESSAGE = """
 {"dt_from": "2022-09-01T00:00:00",
 "dt_upto": "2022-12-31T23:59:00",
 "group_type": "month"}
-Значение group_type может быть hour, day, month
+Значение group_type может быть hour, day, week, month
 """
 
 VALIDATION_ERROR_MESSAGE = """
@@ -24,7 +25,7 @@ VALIDATION_ERROR_MESSAGE = """
 {"dt_from": "2022-09-01T00:00:00",
 "dt_upto": "2022-12-31T23:59:00",
 "group_type": "month"}
-Значение group_type может быть hour, day, month
+Значение group_type может быть hour, day, week, month
 """
 
 DATE_ORDER_ERROR_MESSAGE = """
