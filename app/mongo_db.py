@@ -1,27 +1,10 @@
 from datetime import datetime, timedelta
-from pathlib import Path
 
-import bson
-from motor.motor_asyncio import (
-    AsyncIOMotorClient,
-    AsyncIOMotorCollection,
-    AsyncIOMotorDatabase,
-)
+from motor.motor_asyncio import AsyncIOMotorClient
+
 
 from app.config import settings
 from app.constants import TimePeriod
-
-
-async def _load_bson_data(collection: AsyncIOMotorCollection, bson_path: Path):
-    content = bson.decode_all(bson_path.read_bytes())
-    await collection.insert_many(content)
-
-
-async def _load_init_data(db: AsyncIOMotorDatabase):
-    count = await db.sample_collection.count_documents({})
-    if count == 0:
-        filepath = Path(__file__).parent / "sampleDB" / "sample_collection.bson"
-        await _load_bson_data(db.sample_collection, filepath)
 
 
 _aggregate_salary_parameters = {
@@ -49,7 +32,7 @@ _aggregate_salary_parameters = {
 class MongoDatabase:
     def __init__(self, mongo_uri):
         self._client = AsyncIOMotorClient(
-            settings.mongo_uri, serverSelectionTimeoutMS=5000
+            mongo_uri, serverSelectionTimeoutMS=5000
         )
         self._db = self._client[settings.mongo_db_name]
 
